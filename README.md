@@ -6,7 +6,7 @@ Source code for the paper "Adversarial Data Augmentation Network for Speech Emot
     Tensorflow 1.10.0
 
 ## Data Preparation
-The emotion feature vectors were extracted using the openSMILE toolkit. Codes in folders `matlab` and `scripts` can help to extract emotion features from waveforms and store the feature vectors in .mat files.
+The emotion feature vectors were extracted using the openSMILE toolkit. Codes in folders `matlab` and `scripts` can help extract emotion features from waveforms and store the feature vectors in .mat files.
 
 ## Data Augmentation
 - `train_adan.py` trains the ADAN and creates augmented sets;
