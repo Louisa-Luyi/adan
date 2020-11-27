@@ -9,11 +9,9 @@ Source code for the paper "Adversarial Data Augmentation Network for Speech Emot
 The emotion feature vectors were extracted using the openSMILE toolkit. Codes in folders `matlab` and `scripts` can help extract emotion features from waveforms and store the feature vectors in .mat files.
 
 ## Data Augmentation
-- `train_adan.py` trains the ADAN and creates augmented sets;
-- `train_wadan.py` trains the WADAN and creates augmented sets;
-- `adan.py` defines the ADAN (based on adversarial learning);
-- `wadan.py` defines the WADAN (based on Wasserstein divergence);
-- `utils.py` defines the additional functions used in adan.py and wadan.py;
+- `train_adan.py` trains the augmentation network based on adversarial learning (ADAN) or based on Wasserstein divergence (WADAN), and creates augmented sets;
+- `adan.py` defines the network structure and training process of ADAN and WADAN;
+- `utils.py` defines the additional functions used in adan.py;
 - `tsne_plot.py` defines the functions for plotting the t-SNE plots reflecting the distributions of the real samples and synthetic samples. 
 
 ## Classification Task
