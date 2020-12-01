@@ -4,6 +4,13 @@ Source code for the paper "Adversarial Data Augmentation Network for Speech Emot
 ## Dependencies
     Python 3.x
     Tensorflow 1.10.0
+    Keras 2.1.6
+    numpy
+    tqdm
+    scipy
+    seaborn
+    matplotlib
+    scikit_learn
 
 ## Data Preparation
 The emotion feature vectors were extracted using the openSMILE toolkit. Codes in folders `matlab` and `scripts` can help extract emotion features from waveforms and store the feature vectors in .mat files.
