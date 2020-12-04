@@ -24,3 +24,16 @@ The emotion feature vectors were extracted using the openSMILE toolkit. Codes in
 ## Classification Task
 - `svm_cls.py` trains an SVM classifier and outputs the UAR and WA;
 - `dnn_cls.py` trains a DNN classifier and outputs the UAR and WA.
+
+## How to run
+To train an ADAN or WADAN with default settings:    
+    
+    python train_adan.py 
+    
+Apart from changing the python code file to redefine the parameters, you can also define the parameters directly through the command line. For example, when you want to change the dataset used to train the model:   
+
+    python train_adan.py --dataset=iemocap  
+    
+and changing the number of training epochs:  
+
+    python train_adan.py --dataset=iemocap --epoch=400
