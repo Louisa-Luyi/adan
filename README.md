@@ -21,6 +21,7 @@ The emotion feature vectors were extracted using the openSMILE toolkit. Codes in
 - `adan.py` defines the network structure and training process of ADAN and WADAN;
 - `utils.py` defines the additional functions used in adan.py;
 - `tsne_plot.py` defines the functions for plotting the t-SNE plots reflecting the distributions of the real samples and synthetic samples. 
+- `combine_h5.py` defines the function to merge all augmented sets and save them into a single .h5 file using a virtual dataset.
 
 ## Classification Task
 - `svm_cls.py` trains an SVM classifier and outputs the UAR and WA;
