@@ -7,6 +7,7 @@ Source code for the paper "Adversarial Data Augmentation Network for Speech Emot
     Keras 2.1.6
     numpy
     tqdm
+    h5py
     scipy
     seaborn
     matplotlib
