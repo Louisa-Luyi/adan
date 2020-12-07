@@ -1,0 +1,8 @@
+[ 14.02.2019 - 16:11:33 ]
+    (MSG) [2] in SMILExtract : openSMILE starting!
+[ 14.02.2019 - 16:11:33 ]
+    (MSG) [2] in SMILExtract : config file is: config/IS13_ComParE.conf
+[ 14.02.2019 - 16:11:33 ]
+    (MSG) [2] in cComponentManager : successfully registered 95 component types.
+[ 14.02.2019 - 16:11:33 ]
+    (ERROR) [1] in configManager : cFileConfigReader::openInput : cannot open input file 'config/IS13_ComParE.conf'!

@@ -1,0 +1,71 @@
+#!/bin/sh -e
+# All-in-one script for running speech emotion recognition using IEMOCAP
+# Execute this script like this
+#   scripts/run.sh
+# M.W. Mak, June 2018
+#
+# Results
+# Overall SVM accuracy for 4 classes with 383 features: 55.81%
+# Overall DNN accuracy for 4 classes with 383 features: 55.67%
+
+
+# Make directories (make sure your current dir is iemocap
+mkdir -p arff data/IS13_emotion
+
+stage=1
+
+# Collect categorical labels from corpus and consider 'exc' as 'hap'
+if [ $stage -le 0 ]; then
+    echo "Collect categorical labels from corpus"
+    echo "Better to run this part in enmcomp7 as IEMOCAP is stored there"
+    mkdir -p labels
+    #scripts/collect_lbs.sh
+    scripts/get_cat_labels.pl > ../labels/emo_labels_cat.txt
+    #more labels/emo_labels_cat.txt | sed 's/exc/hap/g' > labels/emo_labels_cat_exc-as-hap.txt
+fi
+
+
+# Convert .wav files to .arff files 
+if [ $stage -le 1 ]; then
+    echo "Convert .wav to .arff files"
+    wav2arff.pl -sdir /corpus/iemocap/Session1 -tdir /home3c/luyi/iemocap_gan/arff/IS13_emotion -c config/IS13_ComParE.conf
+    wav2arff.pl -sdir /corpus/iemocap/Session2 -tdir /home3c/luyi/iemocap_gan/arff/IS13_emotion -c config/IS13_ComParE.conf
+    wav2arff.pl -sdir /corpus/iemocap/Session3 -tdir /home3c/luyi/iemocap_gan/arff/IS13_emotion -c config/IS13_ComParE.conf
+    wav2arff.pl -sdir /corpus/iemocap/Session4 -tdir /home3c/luyi/iemocap_gan/arff/IS13_emotion -c config/IS13_ComParE.conf
+    wav2arff.pl -sdir /corpus/iemocap/Session5 -tdir /home3c/luyi/iemocap_gan/arff/IS13_emotion -c config/IS13_ComParE.conf
+fi
+
+
+# Convert .arff files to .mat files
+if [ $stage -le 2 ]; then    
+    cd matlab
+    /usr/local/bin/matlab2009b -nodisplay -nosplash -nodesktop -r "run(sprintf('%s/arff2mat.m',pwd));quit"
+    cd ..
+fi
+
+# Prepare Leave-One-Speaker-Out (LOSO) cross-validation
+if [ $stage -le 3 ]; then
+    cd matlab
+    /usr/local/bin/matlab2009b -nodisplay -nosplash -nodesktop -r "addpath(sprintf('%s',pwd)); prepare_loso_cv('../data/IS11_emotion', 'iemocap_4cls.mat');quit"
+    cd ..
+fi
+
+# Train SVM and test it
+if [ $stage -le 4 ]; then
+    cd python
+    python3 svm_emotion_cls.py
+    cd ..
+fi
+
+# Train DNN and test it
+if [ $stage -le 5 ]; then
+    cd python
+    source /usr/local/anaconda3/bin/activate tf-py3.6
+    export KERAS_BACKEND=tensorflow
+    python3 dnn_emotion_cls.py
+    cd ..
+fi
+
+
+
+

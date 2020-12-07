@@ -1,0 +1,68 @@
+% Import all .arff files under the arff/ folder and save the data to
+% an N x D matrix, where N is the no. of vectors and D is the feature 
+% dimension
+% To init ARFF Matlab library in ~/so/Matlab/arff (your system may be different)
+% run('~/so/Matlab/arff/setup_arff.m');
+
+% Note: This script require weka2matlab. 
+% You may download the library from https://www.mathworks.com/matlabcentral/fileexchange/21204-matlab-weka-interface?focused=5103451&tab=function
+% You may change the script setup_arff.m to suit your need.
+
+clear; close all;
+
+if (exist('weka2matlab.m','file') == 0),
+    run('~/so/Matlab/arff/setup_arff.m');
+end
+
+% Define options here
+feaType = 'IS09_emotion';
+%feaType = 'IS11_speaker_state';
+nClasses = 11; 
+switch nClasses
+    case 4
+        labels = {'ang','hap','neu','sad'}; 
+        classes = {1,2,3,4};
+    case 9
+        labels = {'ang','exc','fea','fru','hap','neu','sad','sur','xxx'}; 
+        classes = {1,2,3,4,5,6,7,8,9};
+    case 11
+        labels = {'ang','dis','exc','fea','fru','hap','neu','oth','sad','sur','xxx'}; 
+        classes = {1,2,3,4,5,6,7,8,9,10,11};
+    otherwise
+        fprintf('No. of classes mush be either 4, 9 or 11\n');
+        break;
+end
+        
+% Output .mat files containing 'x', 'y', 'targets', 'spkid' and 'gender'
+matfile = sprintf('../data/%s/iemocap_%dcls.mat', feaType, nClasses);
+fprintf('Output file: %s\n', matfile);
+
+% Label files
+labfile = '../labels/emo_labels_cat.txt';
+
+% Arff files
+arffdir = sprintf('../arff/%s',feaType);
+labmap = containers.Map(labels,classes);
+n_emos = length(classes);
+
+% Read training data and save them in .mat file
+dat = get_iemocap_data(arffdir, labfile, labmap);
+dat.classnames = 
+
+% Remove features with 0 variances
+X = dat.x;
+rmidx = std(X,1,1)==0;
+X(:,rmidx) = [];
+
+% Find stats and max and min of features from training data
+[mu, sigma] = get_feature_stats(X);
+xmax = max(X,[],1);
+xmin = min(X,[],1);
+
+% Apply z-norm to input vectors and save structure's fields to file
+dat.x(:,rmidx) = [];
+dat.x = znorm(dat.x, mu, sigma);
+save(matfile, '-struct', 'dat');
+
+break;
+
